@@ -14,8 +14,6 @@ app.post("/", async (req, res) => {
     if (!original_url) return res.status(400).json({ error: "original_url is required" });
 
     const shortUrl = shortenUrl(original_url);
-
-    // Save original_url and shortKey in DB
     await sql`
       INSERT INTO url_shortener (original_url, shortend_url)
       VALUES (${original_url}, ${shortUrl});
@@ -28,7 +26,6 @@ app.post("/", async (req, res) => {
   }
 });
 
-// Lookup original url by short key
 app.get("/original/:key", async (req, res) => {
   const key = req.params.key;
   try {
@@ -58,8 +55,6 @@ app.get("/:key", async (req, res) => {
       }
   
       const originalUrl = result[0].original_url;
-  
-      // Redirect to the original URL
       return res.redirect(originalUrl);
   
     } catch (err) {
